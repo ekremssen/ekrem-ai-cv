@@ -2,9 +2,8 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Ekrem Şen • Senior BA | Team Lead | PM Assistant</title>
+  <title>Ekrem Şen • Senior BA / Team Lead / Project Manager</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <style>
     * {
       box-sizing: border-box;
@@ -63,21 +62,20 @@
     }
 
     .avatar {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       overflow: hidden;
       border: 2px solid rgba(56, 189, 248, 0.7);
       box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
       flex-shrink: 0;
-      background: #020617;
     }
 
     .avatar img {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     .badge {
@@ -103,8 +101,8 @@
     }
 
     h1 {
-      font-size: 24px;
-      line-height: 1.3;
+      font-size: 26px;
+      line-height: 1.2;
     }
 
     h1 span.highlight {
@@ -116,7 +114,7 @@
     .subtitle {
       font-size: 13px;
       color: #e5e7eb;
-      opacity: 0.88;
+      opacity: 0.9;
       margin-top: 4px;
     }
 
@@ -243,7 +241,7 @@
     }
 
     .chat-input button:hover {
-      opacity: 0.95;
+      filter: brightness(1.05);
     }
 
     .right-panel {
@@ -262,6 +260,12 @@
       margin-bottom: 4px;
     }
 
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
     .quick-btn {
       border-radius: 12px;
       border: 1px solid rgba(51, 65, 85, 0.9);
@@ -275,7 +279,6 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      margin-bottom: 4px;
     }
 
     .quick-btn span {
@@ -299,7 +302,7 @@
     <div class="left-panel">
       <div class="header-row">
         <div class="avatar">
-          <!-- Fotoğraf dosyanı aynı klasöre ekleyip adını tam olarak böyle yap: ekrem-photo.jpg -->
+          <!-- Kendi fotoğrafını bu isimle aynı klasöre koy -->
           <img src="ekrem-photo.jpg" alt="Ekrem Şen portre fotoğrafı" />
         </div>
         <div>
@@ -309,14 +312,13 @@
           </div>
           <h1>Merhaba, ben <span class="highlight">Ekrem Şen</span> 👋</h1>
           <p class="subtitle">
-            Senior Business Analyst Team Lead / Project Manager.<br />
-            FinTech, ödeme sistemleri, dijital bankacılık ve sermaye piyasaları projelerinde uçtan uca
-            ürün geliştirme ve iş analizi yapıyorum.
+            Senior Business Analyst Team Lead / Project Manager olarak<br />
+            sermaye piyasaları, FinTech, dijital cüzdanlar ve ödeme sistemleri tarafında çalışıyorum.
           </p>
         </div>
       </div>
 
-      <p class="question">“Hakkımda ne öğrenmek istersin? Sor, detaylı anlatayım.”</p>
+      <p class="question">“Benim hakkımda ne öğrenmek istersin?”</p>
 
       <div class="pill-row">
         <div class="pill">FinTech & Ödeme Sistemleri</div>
@@ -327,22 +329,22 @@
       </div>
 
       <div class="links-row">
-        <span>🔗 <a href="https://www.linkedin.com/in/ekremsen/" target="_blank">LinkedIn profili</a></span>
-        <span>✍️ <a href="https://ekremsen.medium.com/" target="_blank">Medium makaleleri</a></span>
+        <span>🔗 <a href="https://www.linkedin.com/in/ekremsen/" target="_blank">LinkedIn profilim</a></span>
+        <span>✍️ <a href="https://ekremsen.medium.com/" target="_blank">Medium yazılarım</a></span>
       </div>
 
       <div class="chat-box">
         <div class="chat-messages" id="chatMessages">
           <div class="msg msg-ai">
-            Selam 👋 Ben Ekrem Şen.<br /><br />
-            Senior Business Analyst Team Lead / Project Manager olarak; FinTech, ödeme sistemleri,
-            dijital cüzdan, sanal POS, API entegrasyonları ve sermaye piyasaları projelerinde çalışıyorum.
-            Sağ taraftaki kartlardan birine tıklayabilir ya da aşağıya doğrudan sorunuzu yazabilirsiniz.
+            Selam 👋 Ben Ekrem. Burada bir nevi “canlı CV” gibi düşünebileceğin küçük bir asistan hazırladım.
+            Kariyer yolculuğum, ekip liderliği deneyimim, FinTech ve ödeme sistemleri projelerim ya da
+            mülakatlarda merak edilebilecek konular hakkında hızlıca bilgi almak istersen, sağ taraftaki
+            kartlardan birine tıklayabilir ya da aşağıya doğrudan sorunuzu yazabilirsiniz.
           </div>
         </div>
 
         <div class="chat-input">
-          <input id="userInput" type="text" placeholder="Bir soru sor (örn: FinTech tecrüben nedir, Gedik’te ne yapıyorsun?)" />
+          <input id="userInput" type="text" placeholder="Bir soru sor (örn: FinTech deneyimin nedir?)" />
           <button id="sendBtn">Gönder ➤</button>
         </div>
       </div>
@@ -351,477 +353,341 @@
     <div class="right-panel">
       <div>
         <div class="section-title">Hızlı Sorular</div>
+        <div class="quick-grid">
+          <button class="quick-btn" data-intent="summary">
+            <span>Özet Profil</span>
+            <small>Kısaca “Ekrem kimdir, ne yapar?”</small>
+          </button>
 
-        <button class="quick-btn" data-intent="summary">
-          <span>Özet Profil</span>
-          <small>Ekrem kimdir, ne yapar?</small>
-        </button>
+          <button class="quick-btn" data-intent="gedik">
+            <span>Gedik Yatırım Rolüm</span>
+            <small>Senior BA Team Lead / Project Manager</small>
+          </button>
 
-        <button class="quick-btn" data-intent="gedik">
-          <span>Gedik Yatırım Rolü</span>
-          <small>Senior BA Team Lead / PM</small>
-        </button>
+          <button class="quick-btn" data-intent="fintech">
+            <span>FinTech & Ödeme Sistemleri</span>
+            <small>Dijital cüzdan, sanal POS, kart, 6493 vb.</small>
+          </button>
 
-        <button class="quick-btn" data-intent="fintech">
-          <span>FinTech & Ödeme Sistemleri</span>
-          <small>Dijital cüzdan, sanal POS, ödeme altyapıları</small>
-        </button>
+          <button class="quick-btn" data-intent="api">
+            <span>API & Entegrasyon Deneyimi</span>
+            <small>REST/SOAP, Postman, SoapUI, entegrasyon projeleri</small>
+          </button>
 
-        <button class="quick-btn" data-intent="api">
-          <span>API & Entegrasyon Deneyimi</span>
-          <small>Postman, SoapUI, entegrasyon projeleri</small>
-        </button>
+          <button class="quick-btn" data-intent="experience">
+            <span>Kariyer Zaman Çizelgesi</span>
+            <small>Tüm şirketler ve tarihleri</small>
+          </button>
 
-        <button class="quick-btn" data-intent="experience">
-          <span>Kariyer Zaman Çizelgesi</span>
-          <small>Tüm şirketler ve tarihler</small>
-        </button>
+          <button class="quick-btn" data-intent="projects">
+            <span>Öne Çıkan Projeler</span>
+            <small>Dijital cüzdan, kart, CRM, kampanya, trading</small>
+          </button>
 
-        <button class="quick-btn" data-intent="projects">
-          <span>Öne Çıkan Projeler</span>
-          <small>Dijital cüzdan, kart, CRM, kampanya</small>
-        </button>
+          <button class="quick-btn" data-intent="learning">
+            <span>Eğitim & Sertifikalar</span>
+            <small>BTK, IIBA, IBM, Google, Udemy…</small>
+          </button>
 
-        <button class="quick-btn" data-intent="learning">
-          <span>Eğitim & Sertifikalar</span>
-          <small>BTK, IIBA, IBM, Google, Udemy…</small>
-        </button>
+          <button class="quick-btn" data-intent="interview">
+            <span>Mülakat Modu</span>
+            <small>“Kendini anlat”, güçlü/zayıf yönler, maaş beklentisi…</small>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    /* ---------------------------------------------
-       1) TEMEL CEVAP HAVUZU (CV + LinkedIn + Medium)
-    ---------------------------------------------- */
-
+    // Tüm yanıtlar benim ağzımdan, insan diliyle ve detaylı şekilde yazıldı.
     const responses = {
-      summary: `KİMİM?
+      summary: [
+        "Kısaca kendimi şöyle özetleyebilirim:",
+        "",
+        "Yaklaşık 15 yıldır teknoloji, finans ve telekom tarafında çalışan bir Senior Business Analyst Team Lead / Project Manager’im.",
+        "Özellikle FinTech, sermaye piyasaları, dijital cüzdanlar, ödeme sistemleri ve API/entegrasyon projelerinde uzmanlaştım.",
+        "",
+        "Beni öne çıkaran noktalar:",
+        "• İş birimi, geliştirme ekibi, dış vendor ve denetim tarafını aynı masada toplayabilmem.",
+        "• Gereksinimi netleştirip, akışları sadeleştirip, dokümantasyonu geliştiricinin anlayacağı dile indirebilmem.",
+        "• Ekip yönetimi, önceliklendirme, roadmap ve sprint planlama konularında sorumluluk almayı sevmem.",
+        "• Teknik detaya inmekten çekinmeyen ama iş açısından da resmi kaybetmeyen bir profil olmam.",
+        "",
+        "LinkedIn’de on binlerce kişiye ulaşan post’lar, Medium’da FinTech ve iş analizi üzerine yazdığım makaleler ve",
+        "gerçek projelerden gelen tecrübeyi birleştirip; hem sahada, hem masada, hem de doküman tarafında üretmeye devam ediyorum."
+      ].join("\n"),
 
-Fintech, ödeme sistemleri, dijital bankacılık ve telekomünikasyon alanlarında 10+ yıllık deneyime sahip bir Senior Business Analyst Team Lead / Project Manager’ım.
+      gedik: [
+        "Gedik Yatırım Menkul Değerler A.Ş.",
+        "Senior Business Analyst Team Lead / Project Manager — Ekim 2025 – Devam",
+        "",
+        "Gedik Yatırım’da temel odağım; sermaye piyasaları tarafındaki dijital kanalların ve arka ofis süreçlerinin hem",
+        "müşteri deneyimi hem de regülasyon açısından güçlü, sürdürülebilir ve denetlenebilir halde olması.",
+        "",
+        "Öne çıkan başlıklar:",
+        "• Spot döviz alım–satım, yatırım uygulamaları, mobil ve trader platformlarının iş ve teknik analizini yürütüyorum.",
+        "• Check-Sim (SIM blokaj kaldırma), 2FA/Soft OTP, Yatırımcı Data Bank (YDB) gibi projelerde iş gereksinimlerini uçtan uca yönetiyorum.",
+        "• CRM ve EBA entegrasyonları, SMS/Push altyapıları, loglama ve denetim gereksinimleri (SPK Bilgi Sistemleri Tebliği vb.) ile yakından ilgileniyorum.",
+        "• CEO, PMO, dış tedarikçiler (Geneks, Turatel, Matrix vb.) ve iç denetim ekipleriyle düzenli toplantılar yaparak proje çıktılarının",
+        "  hem iş hedeflerini hem de regülasyon şartlarını karşılamasını sağlıyorum.",
+        "• Analist ekibiyle birlikte; backlog yönetimi, kabul kriterleri, test senaryoları, dokümantasyon standartları ve iletişim kalitesini",
+        "  sistemli bir şekilde iyileştirmeye odaklanıyorum.",
+        "",
+        "Kısacası Gedik tarafında rolüm; sadece analiz yazmak değil, işin uçtan uca sahipliğini üstlenen bir takım lideri ve proje yöneticisi olmak."
+      ].join("\n"),
 
-Kariyerim boyunca:
-• Dijital cüzdanlar, sanal POS ve kart altyapıları,
-• Mobil bankacılık & yatırım uygulamaları,
-• API & CRM entegrasyonları,
-• KYC/NFC doğrulama, fraud önleme,
-• Sermaye piyasaları ve trading ürünleri
+      fintech: [
+        "FinTech & Ödeme Sistemleri deneyimimi birkaç başlıkla özetleyebilirim:",
+        "",
+        "Dijital Cüzdanlar:",
+        "• Tami Cüzdan, Uption Kart, seyahat odaklı gömülü cüzdanlar gibi projelerde; kart, bakiye, iade, voucher ve kampanya akışlarını tasarladım.",
+        "• Tokenization, kart saklama, kart numarası maskeleme gibi güvenlik ve deneyim konularında iş ve teknik gereksinimler yazdım.",
+        "",
+        "Ödeme Sistemleri & Sanal POS:",
+        "• Sanal POS, 3D Secure, fraud ve chargeback süreçleriyle çalıştım; BIN yönetimi, banka bazlı kurallar, taksit ve komisyon yapıları gibi",
+        "  konularda analitik ve operasyon tarafını bir araya getirdim.",
+        "• Mastercard’ın 2030 sonrası kart numarası vizyonu, açık bankacılık, alternatif ödeme yöntemleri gibi trendleri yakından takip ediyorum",
+        "  ve Medium’da bunları sade dille anlatmaya çalışıyorum.",
+        "",
+        "Regülasyon & 6493:",
+        "• 6493 sayılı kanun kapsamında elektronik para kuruluşlarının rolü, lisans süreçleri, sermaye şartları ve gözetim mekanizmalarıyla ilgili",
+        "  içerikler ürettim, projelerde bu bakış açısını kullandım.",
+        "",
+        "Kısaca; FinTech tarafında sadece konsept konuşan biri değil, gerçek projelerde API, ekran, muhasebe ve operasyon tarafını birleştirmiş biriyim."
+      ].join("\n"),
 
-gibi alanlarda uçtan uca ürün geliştirme ve iş analizi süreçlerini yönettim.
+      api: [
+        "API & Entegrasyon Deneyimi:",
+        "",
+        "• Postman ve SoapUI kullanarak; fonksiyonel, entegrasyon ve regresyon senaryolarını organize edecek şekilde collection/test suite yapıları kuruyorum.",
+        "• Header, token, environment değişkenleri, mock server’lar, assertion’lar ve loglama tarafını düzenli bir standarda oturtmayı seviyorum.",
+        "",
+        "UPT Ödeme Hizmetleri:",
+        "• Uption Kart, Metropol POS, yurtdışı para transferi (Inpay), GSM hediye API’leri (D-tone) gibi projelerde uçtan uca entegrasyon analizi yaptım.",
+        "• Kart üretimi, kurye, aktivasyon, POS entegrasyonları, kampanya ve cashback akışlarını BPMN ve ekran tasarımlarıyla birlikte yönettim.",
+        "",
+        "Akbank:",
+        "• Tosla, ödeme sistemleri ve kampanya tarafında hem mobil hem backend servislerde; API uçları, hata kodları, log formatları ve monitoring gereksinimlerini",
+        "  analist bakış açısıyla toparladım.",
+        "",
+        "Vodafone:",
+        "• Siebel CRM/PRM üzerinde ürün kataloğu, kampanya motoru, yetki matrisi, migration ve entegrasyon projelerinde servis ve veri akışını kurguladım.",
+        "",
+        "Genel olarak, entegrasyona şöyle bakıyorum:",
+        "• İyi bir entegrasyon; dokümantasyonu net, hata kodları tutarlı, log’ları denetlenebilir ve test senaryoları tekrar edilebilir olandır."
+      ].join("\n"),
 
-Agile/Scrum metodolojileriyle çalışan ekiplerde:
-• Ürün vizyonunu netleştirme,
-• Gereksinimleri iş–kullanıcı–teknik eksende toplama,
-• BPMN/UML ile süreç modelleme,
-• Kullanıcı hikayeleri ve kabul kriterleri yazma,
-• Ekipler arası iletişimi sadeleştirme
+      experience: [
+        "Kariyer Zaman Çizelgesi:",
+        "",
+        "• Senior Business Analyst Team Lead / Project Manager — Gedik Yatırım Menkul Değerler A.Ş.",
+        "  Ekim 2025 – Devam",
+        "",
+        "• Sr. Expert Business Analyst (Project Based Consultant) — BilgeAdam Teknoloji",
+        "  Haziran 2025 – Eylül 2025",
+        "",
+        "• Senior Expert Business Analyst — DİAŞ Teknoloji",
+        "  Şubat 2024 – Ocak 2025",
+        "",
+        "• Expert Business Analyst — UPT Ödeme Hizmetleri ve Elektronik Para A.Ş.",
+        "  Kasım 2021 – Ocak 2024",
+        "",
+        "• Senior Business Analyst — Akbank",
+        "  Nisan 2018 – Kasım 2021",
+        "",
+        "• Business Analyst & Test Engineer — Vodafone",
+        "  Haziran 2013 – Nisan 2018",
+        "",
+        "• Quality and Process Management Specialist — Vodafone",
+        "  Ağustos 2009 – Haziran 2013",
+        "",
+        "• Hakediş Kontrol Sorumlusu — Boğaziçi Elektrik Dağıtım A.Ş.",
+        "  Ağustos 2005 – Ağustos 2007",
+        "",
+        "Eğitim:",
+        "• Anadolu Üniversitesi — İşletme",
+        "• Çanakkale Onsekiz Mart Üniversitesi — Otomotiv",
+      ].join("\n"),
 
-konularında uzmanlaştım.
+      projects: [
+        "Seçtiğim birkaç kritik projeyi özetleyeyim:",
+        "",
+        "• Spot Döviz & Sermaye Piyasası Ürünleri (Gedik Yatırım)",
+        "  - Spot döviz alım/satım, trading ekranları, OTC entegrasyonları, tatil günleri, muhasebe kurguları ve süreç akışları.",
+        "",
+        "• Check-Sim & SIM Blokaj Kaldırma (Gedik Yatırım)",
+        "  - Turatel STS entegrasyonu, isCheckSimChange parametresi, retry mekanizması, hata kodları ve CRM tarafındaki ekranlar.",
+        "",
+        "• Dijital Cüzdan ve Kart Projeleri (UPT & diğerleri)",
+        "  - Uption Kart, Metropol POS, kampanya & cashback motoru, kart gönderim/aktivasyon, kurye ve iade süreçleri.",
+        "",
+        "• Tosla & Starbucks App-to-App, İstanbulkart, oyun ödemeleri, e-pin, taksitli alışveriş projeleri (Akbank)",
+        "  - Hem müşteri tarafındaki deneyimi hem de arka taraftaki muhasebe, fraud ve raporlama süreçlerini bir arada ele aldım.",
+        "",
+        "• CRM & Kampanya Projeleri (Vodafone)",
+        "  - Siebel tabanlı ürün kataloğu, kampanya motoru, yetki matrisi, migration ve veri kalitesi projeleri.",
+        "",
+        "Projelerde genel yaklaşımım:",
+        "• Önce problemi net tarif etmek, sonra süreci basitleştirmek, en sonda da geliştirilebilir, test edilebilir ve denetlenebilir bir çözüm tasarlamak."
+      ].join("\n"),
 
-LinkedIn’de 10K+ takipçim, Medium’da ise FinTech, ödeme sistemleri, iş analizi, AI ve prompt mühendisliği üzerine onlarca makalem var. Üretmeyi, öğrendiklerimi paylaşmayı ve ekiplerle birlikte değer üretmeyi seviyorum.`,
+      learning: [
+        "Eğitim ve sertifikaları özet geçeyim:",
+        "",
+        "• IIBA Fundamentals of Business Analysis",
+        "• IIBA CBAP Uluslararası İş Analisti Eğitimleri",
+        "• Uluslararası İş Analizi Metodolojisi ve Teknikleri",
+        "• Proje Yönetimi Uzmanlık Sertifikası",
+        "• Enterprise Design Thinking (IBM)",
+        "• UX Foundation",
+        "• Google Ads Apps Certification",
+        "• Prompt Engineering",
+        "• UFT One 2021.x Essentials",
+        "• SQL Server ile Veri Tabanı Tasarımı",
+        "• Algoritma ve Programlamaya Giriş",
+        "• Etkili Sunum Teknikleri, İkna’nın Sırları, Zor Kişilerle İletişimde Kişilik Analizi",
+        "",
+        "Bunların yanında Medium’da; FinTech 101, ödeme sistemleri, sanal POS, doğrudan satış API’leri, akış diyagramları,",
+        "iş analisti mülakat kartları, Scrum yaklaşımları, backlog yönetimi ve benzeri konularda düzenli yazılar paylaşıyorum."
+      ].join("\n"),
 
-      gedik: `GEDİK YATIRIM ROLÜM
-Senior Business Analyst Team Lead / Project Manager
-Gedik Yatırım Menkul Değerler A.Ş. | İstanbul | Eki 2024 – Devam
+      interview: [
+        "Mülakat Modu:",
+        "",
+        "Aşağıda yöneticilerin en sık sorduğu sorulara kendi ağzımdan verdiğim kısa cevap taslaklarını bulabilirsin.",
+        "",
+        "1) Bize kısaca kendinizden bahseder misiniz?",
+        "Ben FinTech, ödeme sistemleri ve sermaye piyasaları alanında çalışan bir Senior Business Analyst Team Lead / Project Manager’im.",
+        "Yaklaşık 15 yıllık kariyerimde telekom, bankacılık, ödeme kuruluşu ve aracı kurum tarafında çalıştım. En rahat ettiğim yer;",
+        "iş birimi, geliştirme ekibi ve dış vendor’ı aynı masada toplayıp herkesin aynı resmi gördüğü noktayı bulmak.",
+        "",
+        "2) Güçlü yönleriniz neler?",
+        "• Karışık konuları sadeleştirme ve herkesin anlayacağı dilden anlatma becerim.",
+        "• Gereksinim, akış, ekran tasarımı, test ve canlı sonrası izlemeyi zincirin parçaları gibi görmem.",
+        "• Ekip yönetiminde net, saygılı ve şeffaf iletişimi önemsemem.",
+        "",
+        "3) Geliştirmeye çalıştığınız yönleriniz neler?",
+        "Mükemmeliyetçi tarafım bazen hızla çatışabiliyor. Son yıllarda; kritik projelerde nerede %100 kalite, nerede %80 ile ilerleyip",
+        "geri kalanını iteratif geliştirebileceğimi daha iyi ayırt etmeye odaklanıyorum.",
+        "",
+        "4) Maaş beklentiniz nedir?",
+        "Maaş beklentimi; pozisyonun kapsamını, sorumluluk alanını ve toplam paket yapısını gördükten sonra, yüz yüze mülakat sürecinde",
+        "net olarak paylaşmak isterim. Benim için sadece rakam değil, rolün etkisi ve gelişim alanları da önemli.",
+        "",
+        "5) Ekip içinde çatışma yaşarsanız nasıl yönetirsiniz?",
+        "Önce tarafları ayrı ayrı dinleyip herkesin bakış açısını anlamaya çalışırım. Sonrasında konuyu kişiselleştirmeden,",
+        "sürece odaklanarak netleştirmeyi tercih ederim. Karar noktasında ise; iş hedefi, müşteri etkisi ve ekip motivasyonunu",
+        "dengeleyerek net bir yön çizerim.",
+        "",
+        "6) Neden bu pozisyon / neden biz?",
+        "FinTech ve sermaye piyasaları dünyasında; hem teknik detayla uğraşıp hem de ekip liderliği yapabildiğim rollerde yüksek değer üretiyorum.",
+        "Bu pozisyonun da tam bu kesişim noktasında olduğunu düşünüyorum. Hem ürün tarafına katkı sağlamak hem de analist/ekip tarafında",
+        "sorumluluk almak benim için motive edici.",
+        "",
+        "İstersen sohbette; “güçlü yönlerin?”, “zayıf yönlerin?”, “maaş beklentin?”, “neden bu şirket?” gibi sorular yazarak bu cevapların",
+        "daha kısa versiyonlarını da görebilirsin."
+      ].join("\n"),
 
-Gedik’te odaklandığım ana başlıklar:
+      interview_strengths: [
+        "Güçlü yönlerimi şöyle özetleyebilirim:",
+        "",
+        "• Karışık konuları sadeleştirip herkesin anlayacağı dilden anlatabilmem.",
+        "• Gereksinim, süreç, ekran, test ve canlı sonrası izlemeyi tek bir zincirin parçaları gibi ele almam.",
+        "• Ekip yönetiminde netlik, şeffaflık ve karşılıklı saygıya önem vermem.",
+        "• Hem iş hem teknik dile hâkim olmam; yazılımcıyla da, iş birimiyle de aynı masada rahat konuşabilmem."
+      ].join("\n"),
 
-• Sermaye Piyasaları & Dijital Kanallar
-  - Trading platformları (Gedik Trader, mobil yatırım uygulamaları),
-  - Spot döviz, sermaye piyasası ürünleri ve türev işlemler için iş analizi,
-  - Kullanıcı deneyimi, emir iletim akışları, risk ve onay süreçlerinin netleştirilmesi.
+      interview_weaknesses: [
+        "Geliştirmeye çalıştığım yönüm genelde mükemmeliyetçi tarafım:",
+        "",
+        "Bazı işlerde detaylara fazla inip, işi gereğinden uzun sürede bitirmeye yatkın olabiliyorum.",
+        "Son dönemde; kritik noktalarda %100 kaliteyi, çevresinde ise iteratif geliştirme yaklaşımını benimseyerek bu dengeyi daha iyi kurmaya çalışıyorum."
+      ].join("\n"),
 
-• Ürün & Proje Yönetimi
-  - Roadmap ve backlog yönetimi,
-  - Sprint planlama, önceliklendirme ve release takvimi oluşturma,
-  - CEO, PMO, iş birimleri, vendor’lar ve teknik ekipler arasında köprü görevi.
+      interview_salary: [
+        "Maaş beklentimle ilgili yaklaşımım şu şekilde:",
+        "",
+        "Maaş beklentimi; pozisyonun kapsamını, sorumluluk alanını ve toplam paket yapısını net gördükten sonra,",
+        "yüz yüze mülakat sürecinde paylaşmayı tercih ediyorum.",
+        "Benim için yalnızca rakam değil, rolün etkisi, ekibin yapısı ve gelişim alanları da önemli."
+      ].join("\n"),
 
-• Entegrasyon & Altyapı
-  - OTC, borsa ve aracı kurum entegrasyonları,
-  - Check-Sim / SIM blokaj kaldırma, 2FA/Soft OTP, YDB (Yatırımcı Veri Bankası) gibi kritik güvenlik ve regülasyon projeleri,
-  - CRM ve iç sistem entegrasyonları, loglama, denetim izi, SPK uyumlu kayıt yapıları.
-
-• Ekip Liderliği
-  - Analist ekibine koçluk, gereksinim toplama ve dokümantasyon kalitesini artırma,
-  - Takım içi sorumluluk dağılımı, karar alma mekanizmalarının netleştirilmesi,
-  - Üst yönetime düzenli ve anlaşılır durum raporları sunma.
-
-Kısaca: Gedik’te hem iş analizi hem ürün hem de proje yönetimi şapkalarını takarak,
-sermaye piyasası ürünlerini daha güvenli, hızlı ve kullanıcı dostu hale getirmek için çalışıyorum.`,
-
-      fintech: `FINTECH & ÖDEME SİSTEMLERİ DENEYİMİ
-
-FinTech tarafında çalıştığım ve içerik ürettiğim başlıca alanlar:
-
-1) Dijital Cüzdan & Kart Sistemleri
-• Dijital cüzdan (wallet), sanal kart, fiziksel kart, cashback ve sadakat modelleri,
-• Kart saklama, tokenization, 3D Secure 1.0 vs 2.0, fraud önleme yaklaşımları,
-• Seyahat ekosistemi ile entegre cüzdan: iptal/iade → cüzdana iade, voucher, ancillary ödemeler.
-
-2) Sanal POS ve Ödeme Altyapıları
-• Sanal POS mimarisi ve işlem akışları,
-• Ödeme gateway’leri, 3D doğrulama, chargeback süreçleri,
-• “Sanal POS Nedir?” gibi rehber içeriklerle mimariyi ve akışları sade şekilde anlatma.
-
-3) Regülasyon & 6493
-• 6493 sayılı Kanun kapsamındaki ödeme kuruluşları ve elektronik para şirketleri,
-• Lisans, ön lisans, teminat, özkaynak şartları ve TCMB gözetim mekanizmaları,
-• Elektronik para kuruluşlarının finans ürünlerindeki stratejik rolü,
-• Sektörün geleceğine dair yorumlar ve Medium’da yayınlanan analiz yazıları.
-
-4) Dijital Bankacılık & Süreçler
-• KYC / NFC doğrulama, kimlik doğrulama adımları,
-• BOA ve arka ofis süreçlerinin dijitalleşmesi,
-• Dijital bankacılıkta hız, güvenlik ve şeffaflık dengesini anlatan içerikler.
-
-Benim FinTech bakış açım:
-Regülasyon + kullanıcı deneyimi + teknik mimari + iş modeli 
-dengesini kurmadan projenin gerçekten başarılı sayılmayacağını düşünüyorum.`,
-
-      api: `API & ENTEGRASYON DENEYİMİ
-
-Teknik tarafı güçlü bir iş analisti / PM olarak; API ve entegrasyon projelerinde hem iş hem teknik ekiplerle rahatça konuşabilen bir yapım var.
-
-• Postman & SoapUI
-  - “Web Service Testleri (SoapUI) – 1 & 2” makalelerinde anlattığım gibi,
-    test suite, test case, test step, properties, environment yönetimi,
-    XPath Match, assertion ve otomasyon bakış açısıyla web servis testleri oluşturuyorum.
-  - Büyük ölçekli entegrasyon projelerinde tekrar eden testleri otomatikleştirerek ciddi zaman kazandırıyorum.
-
-• API Tasarımı ve Dokümantasyonu
-  - REST/SOAP servislerin input/output şemaları, hata kodları, response body yapıları,
-  - Confluence / Markdown tabanlı API dokümanları,
-  - Webhook kurguları, event-driven mimariler, callback senaryoları.
-
-• Entegrasyon Senaryoları
-  - Payment gateway, wallet, CRM, kampanya motoru, dış servisler, SMS/şebeke entegrasyonları,
-  - 3rd party servislerle (ödeme şirketleri, telco, kart programları, loyalty sistemleri) entegrasyon.
-
-• Test Bakışı
-  - Fonksiyonel, entegrasyon, regresyon, yük, stres ve güvenlik testlerinin API perspektifinden ele alınması,
-  - 9 tür API testi (smoke, functional, integration, regression, load, stress, security, UI, fuzz) üzerine farkındalık.
-
-Özetle: API projelerinde sadece gereksinimi yazmakla kalmıyor,
-o API’nin gerçekten “çalışan, izlenebilen ve sürdürülebilir” bir yapıda olmasına odaklanıyorum.`,
-
-      experience: `KARİYER ZAMAN ÇİZELGESİ
-
-• Senior Business Analyst Team Lead / Project Manager
-  Gedik Yatırım Menkul Değerler A.Ş. | İstanbul | Eki 2024 – Devam
-
-• Expert Business Analyst
-  UPT Ödeme Hizmetleri ve Elektronik Para A.Ş. | İstanbul | Kas 2021 – Oca 2024
-
-• Senior Business Analyst
-  Akbank | İstanbul | Nis 2018 – Kas 2021
-
-• Business Analyst & Test Engineer
-  Vodafone | İstanbul | Haz 2013 – Nis 2018
-
-• Quality and Process Management Specialist
-  Vodafone | İstanbul | Ağu 2009 – Haz 2013
-
-• Hakediş Kontrol Sorumlusu
-  Boğaziçi Elektrik Dağıtım A.Ş. | İstanbul | Ağu 2005 – Ağu 2007
-
-EĞİTİM
-• İşletme
-  Anadolu Üniversitesi İktisat Fakültesi | Mezuniyet: 2015
-
-• Otomotiv
-  Çanakkale Onsekiz Mart Üniversitesi | 2001
-
-Bu çizelge; CV’ndeki tarih bilgileri + senin verdiğin güncel Gedik Yatırım başlangıç tarihine (Ekim 2024) göre hazırlanmıştır.`,
-
-      projects: `ÖNE ÇIKAN PROJELERDEN ÖRNEKLER
-
-• Sermaye Piyasaları & Spot Döviz Projeleri (Gedik Yatırım)
-  - Trading ekranları, OTC entegrasyonu, tatil günleri ve muhasebe süreçleri analizi,
-  - Servis akışlarının Geneks ve diğer vendor’larla birlikte uçtan uca tasarlanması,
-  - Denetim ve SPK uyumlu dokümantasyon (akış diyagramları, analiz, kabul kriterleri).
-
-• Check-Sim & SIM Blokaj Kaldırma (Gedik Yatırım)
-  - Turatel entegrasyonu, STS geçişi, isCheckSimChange parametresi,
-  - Retry mekanizması, hata kodları, mobil uygulama (Gedik Mobil & Trader) akışları,
-  - CEO’ya sunulan akış diyagramları ve referans dokümanların hazırlanması.
-
-• Dijital Cüzdan & Kart Projeleri
-  - Dijital cüzdan (wallet), cashback, sadakat, kampanya modülleri,
-  - Tokenization, kart saklama, 3DS altyapısı ile entegre ödeme akışları,
-  - Seyahat ekosistemi ile gömülü finans (uçuş iptal/iade, cüzdan, voucher senaryoları).
-
-• API & Webhook Projeleri
-  - Doğrudan Satış (Direct Sales) API’leri,
-  - Webhook, event-driven entegrasyon, Postman collection’lar,
-  - “Direct Sales Rehberi” gibi teknik Medium makaleleri.
-
-• İş Analizi & Öğrenme İçerikleri
-  - İş Analistleri için Temel SQL sorguları,
-  - İş Analisti mülakat kartları (50+ soru-cevap),
-  - Prompt mühendisliği, ChatGPT komut serileri,
-  - Veri Analizi 101 – İleri Seviye, FinTech 101 – ileri seviye eğitim serileri.
-
-Ortak payda:
-Her projede hem iş değeri hem teknik uygulanabilirlik hem de regülasyon/danetim uyumunu birlikte ele alıyorum.`,
-
-      learning: `EĞİTİM, SERTİFİKA VE SÜREKLİ ÖĞRENME
-
-FORMAL EĞİTİM
-• İşletme — Anadolu Üniversitesi İktisat Fakültesi
-• Otomotiv — Çanakkale Onsekiz Mart Üniversitesi
-
-SERTİFİKA & EĞİTİMLERDEN ÖRNEKLER
-• IIBA Fundamentals of Business Analysis
-• IIBA CBAP International Business Analysis Training
-• Uluslararası İş Analizi Metodolojisi ve Teknikleri
-• Proje Yönetimi Uzmanlık Sertifikası
-• Enterprise Design Thinking (IBM)
-• UX Foundation
-• Google Ads Apps Certification
-• Prompt Engineering (Udemy)
-• API, SQL, test otomasyonu, UFT, veri analizi vb. teknik eğitimler
-• İletişim, sunum teknikleri, ikna ve zor kişilerle iletişim eğitimleri
-
-İÇERİK ÜRETİMİ
-Medium ve LinkedIn üzerinde;
-• FinTech 101 → ileri seviye,
-• Sanal POS,
-• Elektronik para ve 6493 sayılı kanun,
-• BOA ve bankacılık süreçleri,
-• Web servis testleri (SoapUI),
-• Direct Sales / API / webhook rehberleri,
-• ChatGPT “gizli komutlar” eğitim serisi,
-• Veri Analizi 101,
-• İş analistleri için SQL, mülakat kartları
-
-gibi içerikleri düzenli olarak paylaşıyorum.
-
-Benim için öğrenme, sadece eğitim almak değil;
-öğrendiklerimi sade bir dille paylaşarak başkalarının da gelişimine katkı sağlamak demek.`
+      interview_why: [
+        "Bu pozisyonun beni neden çektiğini şöyle anlatabilirim:",
+        "",
+        "FinTech ve sermaye piyasaları alanında; hem teknik detayla uğraşıp hem de ekip liderliği yapabildiğim rollerde yüksek değer üretiyorum.",
+        "Bu rolde de; ürün gelişimi, süreç iyileştirme ve ekip yönetimi sorumluluklarının bir arada olması beni motive ediyor.",
+        "Kısacası, tecrübemle örtüşen ve üzerine koyabileceğim bir alan görüyorum."
+      ].join("\n")
     };
-
-    /* ---------------------------------------------
-       2) NLP TEMELLİ KONU ALGILAMA
-    ---------------------------------------------- */
-
-    const knowledgeBase = responses;
-
-    const keywordMap = {
-      summary: ["ekrem", "kimdir", "özgeçmiş", "profil", "hakkında", "özet"],
-      fintech: ["fintech", "ödeme", "dijital cüzdan", "cüzdan", "token", "sanal pos", "6493", "elektronik para"],
-      api: ["api", "entegrasyon", "postman", "soapui", "json", "xml", "servis", "webhook"],
-      gedik: ["gedik", "yatırım", "trader", "check-sim", "check sim", "ydb", "crm", "sermaye piyasası"],
-      experience: ["kariyer", "deneyim", "iş tecrübesi", "timeline", "tarih", "cv", "özgeçmiş"],
-      projects: ["proje", "projeler", "spot döviz", "kampanya", "wallet", "cüzdan", "kart", "akış", "model"],
-      learning: ["eğitim", "sertifika", "kurs", "öğrenme", "udemy", "btk", "iiba", "cbap", "medium", "makale"]
-    };
-
-    function detectTopic(input) {
-      const lower = input.toLowerCase();
-      let detected = [];
-
-      for (const topic in keywordMap) {
-        const keys = keywordMap[topic];
-        if (keys.some(k => lower.includes(k))) {
-          detected.push(topic);
-        }
-      }
-
-      if (detected.length === 0) {
-        return ["summary"];
-      }
-      return detected;
-    }
-
-    function generateResponse(userQuestion) {
-      const topics = detectTopic(userQuestion);
-      let finalAnswer = "";
-
-      topics.forEach(topic => {
-        const data = knowledgeBase[topic];
-        finalAnswer += `📌 ${topic.toUpperCase()}:\n\n${data}\n\n`;
-      });
-
-      if (topics.length > 1) {
-        finalAnswer =
-          "Sorduğun soru birden fazla konuya değiniyor. Her birini ayrı ayrı cevapladım:\n\n" +
-          finalAnswer;
-      }
-
-      return finalAnswer;
-    }
-
-    /* ---------------------------------------------
-       3) MÜLAKAT MODU – YÖNETİCİ ODakLI CEVAP MOTORU
-    ---------------------------------------------- */
-
-    const interviewQA = {
-      leadership: {
-        q: ["liderlik", "team lead", "ekip", "koordine", "manage", "lider"],
-        a: `🧭 Liderlik Yaklaşımım
-
-Kendimi sadece “task dağıtan” değil, belirsizliği azaltan ve ekibin önünü açan bir lider olarak konumlandırıyorum.
-
-• Net vizyon: Ekibin “neden bu işi yapıyoruz?” sorusuna net cevap almasını sağlarım.
-• Şeffaf iletişim: Riskleri ve engelleri saklamadan, çözüm odaklı masaya getiririm.
-• Sorumluluk paylaşımı: Kritik kararları tek başıma almak yerine, ilgili kişileri sürece dahil ederim.
-• Koçluk: Özellikle analist ekibine dokümantasyon kalitesi, gereksinim toplama, paydaş yönetimi gibi konularda mentörlük yaparım.
-
-Ekiplerde genelde şu geri bildirimi alırım:
-“Ekrem belirsizliği azaltıyor, işi netleştiriyor ve karar almayı kolaylaştırıyor.”`
-      },
-
-      conflict: {
-        q: ["çatışma", "problem", "zor insan", "uyumsuz", "gerilim", "anlaşmazlık"],
-        a: `🤝 Zor Paydaşlarla Çalışma & Çatışma Yönetimi
-
-Çatışma durumlarında önce “kişiyi” değil “konuyu” masaya yatırırım.
-
-1) Dinleme: Tarafların asıl kaygısını anlamaya çalışırım (süre, risk, iş yükü, kalite vb.).
-2) Veri: Tartışmayı kişisel algılardan çıkarıp, kabul kriterleri, ölçümler ve timeline gibi somut veriye çekerim.
-3) Ortak zemin: İş hedefini merkeze koyarım: “Bu ürün/özellik kime ne değer katacak?”
-4) Net aksiyon: Toplantı sonunda mutlaka eylem maddeleri ve sorumlular netleşmiş olur.
-5) Yazılı özet: Sonrasında kısa bir toplantı özeti göndererek uzlaşılan noktaları kayıt altına alırım.
-
-Bu yaklaşım; gerilimi düşürüp, aynı hedefe bakan bir ekip hissi yaratıyor.`
-      },
-
-      roadmap: {
-        q: ["roadmap", "ürün", "product", "strateji", "prioritization", "öncelik", "backlog"],
-        a: `🚀 Roadmap ve Önceliklendirme Yaklaşımım
-
-Roadmap’i sadece “istek listesi” olarak değil, şirket stratejisi ile uyumlu yaşayan bir doküman olarak görüyorum.
-
-• Önceliklendirme:
-  - RICE, Kano ve Risk–Etki analizlerini birlikte kullanırım.
-  - Yüksek gürültülü ama düşük değerli talepleri erken aşamada eleyebilirim.
-• Şeffaflık:
-  - Yönetim için 30–60–90 günlük görünürlük sağlarım.
-  - Ekiplerin kapasitesini ve gerçekçi teslimat tarihlerini açıkça paylaşırım.
-• Veri odaklı karar:
-  - Kullanıcı geri bildirimi, prod log’ları, hata kayıtları ve iş birimi taleplerini birlikte değerlendiririm.
-
-Sonuç olarak: “Neden bu iş bu sprintte var ya da yok?” sorusuna veri ve mantıkla cevap verebiliyorum.`
-      },
-
-      fintech: {
-        q: ["fintech", "ödeme", "cüzdan", "sanal pos", "regülasyon", "6493"],
-        a: `💳 FinTech & Ödeme Sistemleri Tarafında Nasıl Değer Katıyorum?
-
-12+ yıllık geçmişimde ödeme, dijital cüzdan ve regülasyon tarafında hem proje yapmış hem de içerik üretmiş biriyim.
-
-• Görünmeyeni görünür kılıyorum:
-  - Kart numarası, tokenization, fraud motorları, 3DS gibi kavramları sadeleştirip ekipler arası ortak dil oluşturuyorum.
-• Regülasyon bilinci:
-  - 6493 sayılı Kanun, elektronik para lisans yapısı, TCMB beklentileri gibi konuları takip ederek, projelerde sürpriz regülasyon riski çıkmamasına özen gösteriyorum.
-• Uçtan uca perspektif:
-  - Sadece ödeme anına değil; iade, chargeback, settlement, raporlama ve denetim adımlarına kadar uçtan uca bakıyorum.
-
-Kısaca: FinTech projelerinde hem iş hem regülasyon hem de teknik açıdan “sistemin bütününü” düşünen taraftayım.`
-      },
-
-      analysis: {
-        q: ["analiz", "bpmn", "uml", "gereksinim", "kabul kriteri", "user story", "iş analizi"],
-        a: `📘 İş Analizi Yaklaşımım
-
-İş analistliğini sadece “gereksinim yazma” işi olarak görmüyorum; doğru soruyu sorma, problemi netleştirme ve ekipler arasında tercümanlık yapma işi olarak görüyorum.
-
-• Modelleme:
-  - BPMN 2.0 ile uçtan uca süreç akışları,
-  - UML (use case, sequence, activity) diyagramları,
-  - Mermaid, Miro vb. araçlarla görsel anlatım.
-• Gereksinim:
-  - İş, kullanıcı ve teknik açıdan üç eksende gereksinim toplama,
-  - User story + acceptance criteria yapısı (Given / When / Then).
-• Denetim uyumu:
-  - Özellikle finans ve sermaye piyasalarında dokümanları SPK / iç denetim beklentilerine uygun formatta hazırlama.
-
-Beni farklı kılan nokta:
-Dokümanı okuyan geliştirici kafasında ekranı ve akışı rahatça çizebiliyor; iş birimi ise “evet, tam da bunu istiyorum” diyebiliyor.`
-      },
-
-      pressure: {
-        q: ["deadline", "zaman", "baskı", "kriz", "acil", "yoğun"],
-        a: `🔥 Baskı Altında Çalışma
-
-Zaman baskısı veya kriz anlarında öncelikle panik değil, plan üretmeye odaklanırım.
-
-1) Hızlı kapsam gözden geçirme:
-   - “Mutlaka şimdi olmalı” ile “bekleyebilir” olanı ayırırım.
-2) Kritik yol:
-   - Kritik path üzerindeki işleri ve bağımlılıkları çıkarır, oraya odaklanırım.
-3) Engeller:
-   - Blocker’ları tespit edip ilgili ekiplerle birebir temas kurarım.
-4) İletişim:
-   - Yönetimi ve ekipleri kısa, net ve düzenli mesajlarla bilgilendiririm.
-
-Bu yaklaşım, hem ekibin motivasyonunu koruyor hem de yoğun dönemlerde kaos yerine kontrollü ilerlemeyi sağlıyor.`
-      },
-
-      default: `Bu soruyu mülakat modunda cevaplamak için biraz daha netleştirebiliriz.
-
-Örneğin şunları sorabilirsin:
-• “Liderlik stilin nasıl?”
-• “Zor paydaşlarla nasıl çalışırsın?”
-• “Roadmap’i nasıl yönetiyorsun?”
-• “FinTech tarafındaki uzmanlığın ne?”
-• “API/entegrasyon projelerinde rolün ne?”
-• “Kriz ve deadline baskısında nasıl davranırsın?”`
-    };
-
-    function interviewModeAnswer(q) {
-      const lower = q.toLowerCase();
-
-      for (let key in interviewQA) {
-        if (key === "default") continue;
-        if (interviewQA[key].q.some(k => lower.includes(k))) {
-          return interviewQA[key].a;
-        }
-      }
-      return interviewQA.default;
-    }
-
-    /* ---------------------------------------------
-       4) MESAJ EKLEME & EVENT HANDLER
-    ---------------------------------------------- */
 
     function addMessage(text, isUser) {
       const msg = document.createElement("div");
       msg.className = "msg " + (isUser ? "msg-user" : "msg-ai");
       msg.textContent = text;
-
       const box = document.getElementById("chatMessages");
       box.appendChild(msg);
       box.scrollTop = box.scrollHeight;
     }
 
-    document.getElementById("sendBtn").onclick = () => {
-      const inputEl = document.getElementById("userInput");
-      const text = inputEl.value.trim();
-      if (!text) return;
-
-      addMessage(text, true);
-
+    function getReply(text) {
       const lower = text.toLowerCase();
 
-      // Mülakat Modu tetikleyicileri
-      if (lower.includes("mülakat") || lower.includes("interview") || lower.includes("yönetici")) {
-        const replyInterview = interviewModeAnswer(text);
-        addMessage(replyInterview, false);
-        inputEl.value = "";
-        return;
-      }
+      // Mülakat anahtar kelimeleri
+      if (lower.includes("mülakat")) return responses.interview;
+      if (lower.includes("maaş") || lower.includes("ücret") || lower.includes("salary"))
+        return responses.interview_salary;
+      if (lower.includes("güçlü yön") || lower.includes("strength"))
+        return responses.interview_strengths;
+      if (lower.includes("zayıf yön") || lower.includes("geliştirm") || lower.includes("weakness"))
+        return responses.interview_weaknesses;
+      if (lower.includes("neden bu") || lower.includes("neden seni") || lower.includes("why this"))
+        return responses.interview_why;
 
-      const reply = generateResponse(text);
+      // Genel profil anahtar kelimeleri
+      if (lower.includes("özet") || lower.includes("profil") || lower.includes("kim") )
+        return responses.summary;
+      if (lower.includes("gedik"))
+        return responses.gedik;
+      if (lower.includes("fintech") || lower.includes("ödeme") || lower.includes("cüzdan"))
+        return responses.fintech;
+      if (lower.includes("api") || lower.includes("entegrasyon") || lower.includes("integrat"))
+        return responses.api;
+      if (lower.includes("kariyer") || lower.includes("deneyim") || lower.includes("tarih") || lower.includes("cv"))
+        return responses.experience;
+      if (lower.includes("proje"))
+        return responses.projects;
+      if (lower.includes("eğitim") || lower.includes("sertifika") || lower.includes("kurs"))
+        return responses.learning;
+
+      // Hiçbir şeye düşmezse varsayılan cevap
+      return "Soruyu anladım ama hangi başlığa daha yakın olduğunu tam çıkaramadım. " +
+        "İstersen daha net yazabilir ya da sağdaki kartlardan birini seçebilirsin: Özet Profil, Gedik Yatırım Rolüm, FinTech, API & entegrasyon, Kariyer, Projeler, Eğitim veya Mülakat Modu.";
+    }
+
+    document.getElementById("sendBtn").onclick = () => {
+      const inputEl = document.getElementById("userInput");
+      const text = inputEl.value;
+      if (!text.trim()) return;
+      addMessage(text, true);
+      const reply = getReply(text);
       addMessage(reply, false);
       inputEl.value = "";
     };
 
+    document.getElementById("userInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("sendBtn").click();
+      }
+    });
+
     document.querySelectorAll(".quick-btn").forEach(btn => {
       btn.onclick = () => {
         const intent = btn.dataset.intent;
-        addMessage(btn.querySelector("span").innerText, true);
-        addMessage(knowledgeBase[intent], false);
+        const title = btn.querySelector("span").innerText;
+        addMessage(title, true);
+        addMessage(responses[intent], false);
       };
     });
   </script>
