@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>shen-gen | TR/EN Evidence-based Hiring Copilot</title>
+
+  <style>
+    :root{
+      --bg:#060a18; --card:#0d1533; --text:#eaf0ff; --muted:#9fb0e6; --line:rgba(255,255,255,.12);
+      --ok:#26d07c; --warn:#ffcc00; --bad:#ff5a5f; --accent:#6ea8ff; --chip:rgba(110,168,255,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(110,168,255,.25), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(38,208,124,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .topbar{position:sticky; top:0; z-index:10; background: rgba(6,10,24,.78); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08);}
+    header{max-width:1280px; margin:0 auto; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{width:44px;height:44px;border-radius:14px;background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(38,208,124,.92));box-shadow:0 10px 30px rgba(0,0,0,.35);}
+    .brand h1{margin:0;font-size:22px;letter-spacing:.4px;text-transform:lowercase}
+    .tag{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
+    .rightMeta{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); font-size:12px; color:var(--muted)}
+    .pill b{color:var(--text); font-weight:800}
+    main{max-width:1280px; margin:0 auto; padding:16px}
+    .grid{display:grid; gap:12px; grid-template-columns:1.05fr .95fr;}
+    @media (max-width:1100px){.grid{grid-template-columns:1fr}}
+    .card{border-radius:16px; border:1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); padding:14px; box-shadow:0 12px 30px rgba(0,0,0,.25);}
+    .card h2{margin:0 0 10px; font-size:14px; color:#dfe6ff}
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
+    textarea, input, select{
+      width:100%; border-radius:12px; border:1px solid var(--line); background: rgba(10,14,30,.45); color:var(--text);
+      padding:10px 12px; outline:none;
+    }
+    textarea{min-height:92px; resize:vertical; line-height:1.35}
+    input[type="file"]{padding:10px}
+    .row{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+    @media (max-width:720px){.row{grid-template-columns:1fr}}
+    .btns{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    button{border:0; border-radius:12px; padding:10px 12px; cursor:pointer; background: rgba(110,168,255,.18); color:var(--text); border:1px solid rgba(110,168,255,.35); font-weight:800}
+    button.primary{background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(110,168,255,.55)); border:1px solid rgba(110,168,255,.55); color:#071022}
+    button.ghost{background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); color:var(--text)}
+    .tiny{font-size:11px; color:var(--muted)}
+    .muted{color:var(--muted); font-size:12px; line-height:1.4}
+    .hr{height:1px; background: rgba(255,255,255,.08); margin:12px 0}
+
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: var(--chip); font-size:12px}
+    .chip button{padding:0; border:0; background:transparent; color:var(--text); cursor:pointer; font-weight:900}
+
+    .resultGrid{display:grid; gap:12px; grid-template-columns:1fr 1fr}
+    @media (max-width:1100px){.resultGrid{grid-template-columns:1fr}}
+    .gauge{border-radius:16px; padding:14px; border:1px solid var(--line); background: rgba(10,14,30,.35);}
+    .scoreRow{display:flex; align-items:flex-end; justify-content:space-between; gap:10px}
+    .score{font-size:44px; font-weight:900; margin:0; letter-spacing:-1px}
+    .badge{display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:6px 10px; font-size:12px; border:1px solid var(--line); background: rgba(255,255,255,.04); margin-top:8px}
+    .bar{width:100%; height:12px; border-radius:999px; background: rgba(255,255,255,.08); overflow:hidden; margin-top:10px; border:1px solid rgba(255,255,255,.10)}
+    .bar>div{height:100%; width:0%}
+    .ok{background: linear-gradient(90deg, rgba(38,208,124,.9), rgba(38,208,124,.55))}
+    .warn{background: linear-gradient(90deg, rgba(255,204,0,.9), rgba(255,204,0,.55))}
+    .bad{background: linear-gradient(90deg, rgba(255,90,95,.9), rgba(255,90,95,.55))}
+    .kpi{display:grid; gap:10px; grid-template-columns:1fr 1fr; margin-top:10px}
+    .kpi .box{background: rgba(255,255,255,.03); border:1px solid var(--line); border-radius:14px; padding:10px}
+    .kpi .num{font-size:18px; font-weight:900}
+    .kpi .lab{font-size:11px; color:var(--muted)}
+    .list{border:1px solid var(--line); background: rgba(10,14,30,.35); border-radius:16px; padding:12px}
+    .list h3{margin:0 0 8px; font-size:13px; color:#dfe6ff}
+
+    .qaGrid{display:grid; gap:10px}
+    .qaCard{border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.02); border-radius:14px; padding:10px}
+    .qaTop{display:flex; justify-content:space-between; gap:10px; align-items:center}
+    .qaTop b{font-size:12px}
+    .pill2{display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); font-size:11px}
+    .pill2.ok{border-color:rgba(38,208,124,.45)}
+    .pill2.warn{border-color:rgba(255,204,0,.45)}
+    .pill2.bad{border-color:rgba(255,90,95,.45)}
+    .hl{background: rgba(255,204,0,.22); padding:0 2px; border-radius:4px}
+
+    .table{width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; overflow:hidden; border-radius:14px; border:1px solid var(--line)}
+    .table th,.table td{border-bottom:1px solid rgba(255,255,255,.08); padding:10px; text-align:left; vertical-align:top}
+    .table th{color:#cfe0ff; background: rgba(255,255,255,.03)}
+    .table tr:last-child td{border-bottom:0}
+
+    .footer{max-width:1280px; margin:0 auto; padding:0 16px 20px; color:var(--muted); font-size:11px}
+  </style>
+
+  <!-- PDF.js + Mammoth (DOCX) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+
+<body>
+  <div class="topbar">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>shen-gen</h1>
+          <span class="tag" data-i18n="tagline">Hap gibi: Multi-soru • Kanıtlı cevap • Scorecard • Compare • TR/EN</span>
+        </div>
+      </div>
+
+      <div class="rightMeta">
+        <span class="pill"><span data-i18n="mode">Mod</span>: <b data-i18n="deterministic">Deterministik</b></span>
+        <span class="pill"><span data-i18n="output">Çıktı</span>: <b data-i18n="evidence">Kanıtlı</b></span>
+        <select id="lang" style="max-width:160px">
+          <option value="tr">Türkçe</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <div class="grid">
+      <!-- LEFT: Questions + Criteria -->
+      <section class="card">
+        <h2 data-i18n="sec1">1) Soru-Listesi + Kriterler</h2>
+
+        <div class="row">
+          <div>
+            <label data-i18n="jobGroup">Job group (opsiyonel)</label>
+            <select id="jobGroup">
+              <option value="auto" data-i18n="jg_auto">Auto (genel)</option>
+              <option value="tech">Tech / Engineering</option>
+              <option value="product">Product / BA / PO</option>
+              <option value="sales">Sales / Marketing</option>
+              <option value="finance">Finance / Accounting</option>
+              <option value="ops">Operations / Support</option>
+            </select>
+            <div class="tiny" data-i18n="jobGroupTip">Seçmezsen de çalışır. Seçersen synonym paketi genişler (Likely eşleşme güçlenir).</div>
+          </div>
+
+          <div>
+            <label data-i18n="qAdd">Soru ekle</label>
+            <input id="qInput" data-i18n-ph="qAddPh" placeholder="Örn: ‘Kubernetes var mı?’, ‘CRM/KPI deneyimi?’, ‘Liderlik?’" />
+            <div class="btns">
+              <button class="ghost" id="addQ" data-i18n="addBtn">+ Ekle</button>
+              <button class="ghost" id="addTemplates" data-i18n="tplBtn">+ Örnek Sorular</button>
+              <button class="ghost" id="clearQs" data-i18n="clearQBtn">Soruları Temizle</button>
+            </div>
+          </div>
+        </div>
+
+        <label data-i18n="qList">Soru listesi</label>
+        <div id="qChips" class="chips"></div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <div>
+            <label data-i18n="mustLabel">Must-have (virgülle)</label>
+            <input id="must" data-i18n-ph="mustPh" placeholder="Örn: SQL, API, Agile..." />
+          </div>
+          <div>
+            <label data-i18n="niceLabel">Nice-to-have (virgülle)</label>
+            <input id="nice" data-i18n-ph="nicePh" placeholder="Örn: Jira, Confluence, Postman..." />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label data-i18n="redLabel">Red flags (virgülle)</label>
+            <input id="red" data-i18n-ph="redPh" placeholder="Örn: fake, plagiarism, unrelated..." />
+          </div>
+          <div class="row" style="grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label data-i18n="minYearsLabel">Min deneyim (yıl)</label>
+              <input id="minYears" type="number" min="0" step="1" data-i18n-ph="minYearsPh" placeholder="Örn: 5" />
+            </div>
+            <div>
+              <label data-i18n="locLabel">Lokasyon (ops.)</label>
+              <input id="location" data-i18n-ph="locPh" placeholder="Örn: İstanbul / Remote" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label data-i18n="weights">Ağırlıklar</label>
+            <div class="row">
+              <div><label class="tiny" data-i18n="wMust">Must</label><input id="wMust" type="number" min="1" step="1" value="12" /></div>
+              <div><label class="tiny" data-i18n="wNice">Nice</label><input id="wNice" type="number" min="1" step="1" value="5" /></div>
+            </div>
+            <div class="row">
+              <div><label class="tiny" data-i18n="wYears">Years</label><input id="wYears" type="number" min="0" step="1" value="8" /></div>
+              <div><label class="tiny" data-i18n="wRed">Red penalty</label><input id="wRed" type="number" min="0" step="1" value="10" /></div>
+            </div>
+          </div>
+
+          <div>
+            <label data-i18n="thresholds">Eşikler</label>
+            <div class="row">
+              <div><label class="tiny" data-i18n="thOk">Uygun</label><input id="thOk" type="number" min="0" max="100" value="75" /></div>
+              <div><label class="tiny" data-i18n="thWarn">Review</label><input id="thWarn" type="number" min="0" max="100" value="55" /></div>
+            </div>
+
+            <div class="hr"></div>
+            <div class="muted" data-i18n="noteExplain">
+              shen-gen iddia etmez; “bulundu/bulunamadı + kanıt” verir. Bu, işe alımda yanıltmayı azaltır.
+            </div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="run" data-i18n="runBtn">Çalıştır: QA + Skor + Compare</button>
+          <button class="ghost" id="preset" data-i18n="presetBtn">Preset: Genel</button>
+          <button class="ghost" id="reset" data-i18n="resetBtn">Sıfırla</button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Candidates -->
+      <section class="card">
+        <h2 data-i18n="sec2">2) Adaylar (CV + LinkedIn)</h2>
+
+        <div class="row">
+          <div class="card" style="padding:12px">
+            <h2 style="margin:0 0 8px" data-i18n="cand1">Aday #1</h2>
+            <label data-i18n="name">Ad Soyad</label>
+            <input id="nameA" data-i18n-ph="namePh" placeholder="Aday adı" />
+
+            <label data-i18n="cvFile">CV Dosyası (PDF/DOCX/TXT)</label>
+            <input id="cvFileA" type="file" accept=".pdf,.docx,.txt" />
+
+            <label data-i18n="cvText">CV Metni</label>
+            <textarea id="cvTextA" data-i18n-ph="cvTextPh" placeholder="Metin burada..."></textarea>
+
+            <label data-i18n="liUpload">LinkedIn içerik yükle / yapıştır</label>
+            <div class="tiny" data-i18n="liTip">En güvenlisi: About/Experience metnini yapıştır veya PDF/HTML/TXT yükle.</div>
+            <input id="liFileA" type="file" accept=".pdf,.docx,.txt,.html,.htm" />
+            <textarea id="liTextA" data-i18n-ph="liTextPh" placeholder="LinkedIn metni..."></textarea>
+
+            <div class="btns"><button class="ghost" id="clearA" data-i18n="clearBtn">Temizle</button></div>
+          </div>
+
+          <div class="card" style="padding:12px">
+            <h2 style="margin:0 0 8px" data-i18n="cand2">Aday #2</h2>
+            <label data-i18n="name">Ad Soyad</label>
+            <input id="nameB" data-i18n-ph="namePh" placeholder="Aday adı" />
+
+            <label data-i18n="cvFile">CV Dosyası (PDF/DOCX/TXT)</label>
+            <input id="cvFileB" type="file" accept=".pdf,.docx,.txt" />
+
+            <label data-i18n="cvText">CV Metni</label>
+            <textarea id="cvTextB" data-i18n-ph="cvTextPh" placeholder="Metin burada..."></textarea>
+
+            <label data-i18n="liUpload">LinkedIn içerik yükle / yapıştır</label>
+            <div class="tiny" data-i18n="liTip">En güvenlisi: About/Experience metnini yapıştır veya PDF/HTML/TXT yükle.</div>
+            <input id="liFileB" type="file" accept=".pdf,.docx,.txt,.html,.htm" />
+            <textarea id="liTextB" data-i18n-ph="liTextPh" placeholder="LinkedIn metni..."></textarea>
+
+            <div class="btns"><button class="ghost" id="clearB" data-i18n="clearBtn">Temizle</button></div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="muted" data-i18n="notePoint">
+          “Doğru sonuç” = kanıtlı sonuç. Bulunamadıysa “yok” demeyiz; “metinde bulunamadı” deriz.
+        </div>
+      </section>
+    </div>
+
+    <!-- RESULTS -->
+    <section class="card" style="margin-top:12px">
+      <h2 data-i18n="sec3">3) Sonuçlar</h2>
+
+      <div class="resultGrid">
+        <!-- A -->
+        <div class="gauge">
+          <div class="scoreRow">
+            <div><div class="tiny" data-i18n="score">Skor</div><p class="score" id="scoreA">—</p></div>
+            <div style="text-align:right"><div class="tiny" data-i18n="summary">Özet</div><div class="badge" id="badgeA">—</div></div>
+          </div>
+          <div class="bar"><div id="barA"></div></div>
+
+          <div class="kpi">
+            <div class="box"><div class="num" id="kMustA">—</div><div class="lab" data-i18n="kMust">Must</div></div>
+            <div class="box"><div class="num" id="kNiceA">—</div><div class="lab" data-i18n="kNice">Nice</div></div>
+            <div class="box"><div class="num" id="kYearsA">—</div><div class="lab" data-i18n="kYears">Years</div></div>
+            <div class="box"><div class="num" id="kRedA">—</div><div class="lab" data-i18n="kRed">Red</div></div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="list">
+            <h3 data-i18n="qaTitle">Soru-Cevap (Aday #1)</h3>
+            <div id="qaA" class="qaGrid"></div>
+          </div>
+
+          <div style="height:12px"></div>
+          <div class="list">
+            <h3 data-i18n="matchTable">Eşleşme Tablosu</h3>
+            <table class="table" id="tableA">
+              <thead><tr><th data-i18n="crit">Kriter</th><th data-i18n="status">Durum</th><th data-i18n="proof">Kanıt</th></tr></thead>
+              <tbody><tr><td colspan="3" class="muted" data-i18n="noAnalysis">Analiz sonrası dolacak.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- B -->
+        <div class="gauge">
+          <div class="scoreRow">
+            <div><div class="tiny" data-i18n="score">Skor</div><p class="score" id="scoreB">—</p></div>
+            <div style="text-align:right"><div class="tiny" data-i18n="summary">Özet</div><div class="badge" id="badgeB">—</div></div>
+          </div>
+          <div class="bar"><div id="barB"></div></div>
+
+          <div class="kpi">
+            <div class="box"><div class="num" id="kMustB">—</div><div class="lab" data-i18n="kMust">Must</div></div>
+            <div class="box"><div class="num" id="kNiceB">—</div><div class="lab" data-i18n="kNice">Nice</div></div>
+            <div class="box"><div class="num" id="kYearsB">—</div><div class="lab" data-i18n="kYears">Years</div></div>
+            <div class="box"><div class="num" id="kRedB">—</div><div class="lab" data-i18n="kRed">Red</div></div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="list">
+            <h3 data-i18n="qaTitleB">Soru-Cevap (Aday #2)</h3>
+            <div id="qaB" class="qaGrid"></div>
+          </div>
+
+          <div style="height:12px"></div>
+          <div class="list">
+            <h3 data-i18n="matchTable">Eşleşme Tablosu</h3>
+            <table class="table" id="tableB">
+              <thead><tr><th data-i18n="crit">Kriter</th><th data-i18n="status">Durum</th><th data-i18n="proof">Kanıt</th></tr></thead>
+              <tbody><tr><td colspan="3" class="muted" data-i18n="noAnalysis">Analiz sonrası dolacak.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="list">
+        <h3 data-i18n="compareTitle">Karşılaştırma</h3>
+        <div id="compare" class="muted" data-i18n="compareEmpty">Çalıştırınca neden-sonuç burada görünür.</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer" data-i18n="footer">
+    LinkedIn URL’den otomatik çekme; izin/rate-limit/değişken yapı nedeniyle yanıltıcı olabilir. İçerik yükleme/yapıştırma en güvenlisi.
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- i18n ----------
+  const I18N = {
+    tr: {
+      tagline:"Hap gibi: Multi-soru • Kanıtlı cevap • Scorecard • Compare • TR/EN",
+      mode:"Mod", deterministic:"Deterministik", output:"Çıktı", evidence:"Kanıtlı",
+      sec1:"1) Soru-Listesi + Kriterler",
+      jobGroup:"İş grubu (opsiyonel)", jg_auto:"Auto (genel)",
+      jobGroupTip:"Seçmezsen de çalışır. Seçersen synonym paketi genişler (Likely eşleşme güçlenir).",
+      qAdd:"Soru ekle", qAddPh:"Örn: ‘Kubernetes var mı?’, ‘CRM/KPI deneyimi?’, ‘Liderlik?’",
+      addBtn:"+ Ekle", tplBtn:"+ Örnek Sorular", clearQBtn:"Soruları Temizle", qList:"Soru listesi",
+      mustLabel:"Must-have (virgülle)", mustPh:"Örn: SQL, API, Agile...",
+      niceLabel:"Nice-to-have (virgülle)", nicePh:"Örn: Jira, Confluence, Postman...",
+      redLabel:"Red flags (virgülle)", redPh:"Örn: fake, plagiarism, unrelated...",
+      minYearsLabel:"Min deneyim (yıl)", minYearsPh:"Örn: 5",
+      locLabel:"Lokasyon (ops.)", locPh:"Örn: İstanbul / Remote",
+      weights:"Ağırlıklar", wMust:"Must", wNice:"Nice", wYears:"Years", wRed:"Red penalty",
+      thresholds:"Eşikler", thOk:"Uygun", thWarn:"Review",
+      noteExplain:"shen-gen iddia etmez; “bulundu/bulunamadı + kanıt” verir. Bu, işe alımda yanıltmayı azaltır.",
+      runBtn:"Çalıştır: QA + Skor + Compare", presetBtn:"Preset: Genel", resetBtn:"Sıfırla",
+      sec2:"2) Adaylar (CV + LinkedIn)", cand1:"Aday #1", cand2:"Aday #2",
+      name:"Ad Soyad", namePh:"Aday adı",
+      cvFile:"CV Dosyası (PDF/DOCX/TXT)", cvText:"CV Metni", cvTextPh:"Metin burada...",
+      liUpload:"LinkedIn içerik yükle / yapıştır", liTip:"En güvenlisi: About/Experience metnini yapıştır veya PDF/HTML/TXT yükle.",
+      liTextPh:"LinkedIn metni...",
+      clearBtn:"Temizle",
+      notePoint:"“Doğru sonuç” = kanıtlı sonuç. Bulunamadıysa “yok” demeyiz; “metinde bulunamadı” deriz.",
+      sec3:"3) Sonuçlar", score:"Skor", summary:"Özet",
+      kMust:"Must", kNice:"Nice", kYears:"Years", kRed:"Red",
+      qaTitle:"Soru-Cevap (Aday #1)", qaTitleB:"Soru-Cevap (Aday #2)",
+      matchTable:"Eşleşme Tablosu", crit:"Kriter", status:"Durum", proof:"Kanıt", noAnalysis:"Analiz sonrası dolacak.",
+      compareTitle:"Karşılaştırma", compareEmpty:"Çalıştırınca neden-sonuç burada görünür.",
+      footer:"LinkedIn URL’den otomatik çekme; izin/rate-limit/değişken yapı nedeniyle yanıltıcı olabilir. İçerik yükleme/yapıştırma en güvenlisi.",
+      // runtime
+      st_ok:"Durum: Uygun", st_warn:"Durum: Review (Belirsiz)", st_bad:"Durum: Zayıf Eşleşme",
+      confirmed:"Confirmed (bulundu)", likely:"Likely (ilişkili)", notfound:"Not found (bulunamadı)",
+      evidenceFound:"Kanıt bulundu", evidenceNotFound:"Metinde bulunamadı (veri eksik olabilir).",
+      winner:"daha uygun", equal:"Skorlar eşit"
+    },
+    en: {
+      tagline:"Snackable: Multi-QA • Evidence-based answers • Scorecard • Compare • TR/EN",
+      mode:"Mode", deterministic:"Deterministic", output:"Output", evidence:"Evidence-based",
+      sec1:"1) Question List + Criteria",
+      jobGroup:"Job group (optional)", jg_auto:"Auto (general)",
+      jobGroupTip:"Works without selection. Selecting expands synonym packs (stronger Likely matches).",
+      qAdd:"Add a question", qAddPh:"e.g., ‘Kubernetes?’, ‘CRM/KPI experience?’, ‘Leadership?’",
+      addBtn:"+ Add", tplBtn:"+ Sample Questions", clearQBtn:"Clear Questions", qList:"Question list",
+      mustLabel:"Must-have (comma-separated)", mustPh:"e.g., SQL, API, Agile...",
+      niceLabel:"Nice-to-have (comma-separated)", nicePh:"e.g., Jira, Confluence, Postman...",
+      redLabel:"Red flags (comma-separated)", redPh:"e.g., fake, plagiarism, unrelated...",
+      minYearsLabel:"Min experience (years)", minYearsPh:"e.g., 5",
+      locLabel:"Location (optional)", locPh:"e.g., Istanbul / Remote",
+      weights:"Weights", wMust:"Must", wNice:"Nice", wYears:"Years", wRed:"Red penalty",
+      thresholds:"Thresholds", thOk:"Fit", thWarn:"Review",
+      noteExplain:"shen-gen does not claim. It returns “found / not found + evidence”. This reduces misleading outputs.",
+      runBtn:"Run: QA + Score + Compare", presetBtn:"Preset: General", resetBtn:"Reset",
+      sec2:"2) Candidates (CV + LinkedIn)", cand1:"Candidate #1", cand2:"Candidate #2",
+      name:"Full name", namePh:"Candidate name",
+      cvFile:"CV File (PDF/DOCX/TXT)", cvText:"CV Text", cvTextPh:"Text here...",
+      liUpload:"LinkedIn content upload / paste", liTip:"Safest: paste About/Experience text or upload PDF/HTML/TXT export.",
+      liTextPh:"LinkedIn text...",
+      clearBtn:"Clear",
+      notePoint:"“Correct result” = evidence-based result. If not found, we say “not found in text”.",
+      sec3:"3) Results", score:"Score", summary:"Summary",
+      kMust:"Must", kNice:"Nice", kYears:"Years", kRed:"Red",
+      qaTitle:"Q&A (Candidate #1)", qaTitleB:"Q&A (Candidate #2)",
+      matchTable:"Match Table", crit:"Criterion", status:"Status", proof:"Evidence", noAnalysis:"Will appear after analysis.",
+      compareTitle:"Comparison", compareEmpty:"After running, evidence-based reasoning will appear here.",
+      footer:"Auto-fetching LinkedIn from URL can be misleading due to permissions/rate limits/layout changes. Upload/paste content is safest.",
+      // runtime
+      st_ok:"Status: Fit", st_warn:"Status: Review (Uncertain)", st_bad:"Status: Weak match",
+      confirmed:"Confirmed (found)", likely:"Likely (related)", notfound:"Not found",
+      evidenceFound:"Evidence found", evidenceNotFound:"Not found in text (data may be missing).",
+      winner:"is better fit", equal:"Scores are equal"
+    }
+  };
+
+  function applyLang(lang){
+    document.documentElement.lang = (lang==="en"?"en":"tr");
+    const dict = I18N[lang] || I18N.tr;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k = el.getAttribute("data-i18n");
+      if(dict[k]) el.textContent = dict[k];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+      const k = el.getAttribute("data-i18n-ph");
+      if(dict[k]) el.setAttribute("placeholder", dict[k]);
+    });
+    window.__shenLang = lang;
+  }
+  $("lang").addEventListener("change", e=>applyLang(e.target.value));
+  applyLang("tr");
+
+  // ---------- synonym packs (small MVP) ----------
+  const SYN = {
+    global: {
+      "business analyst":["iş analisti","ba","requirements","gereksinim","analiz","user story","kullanıcı hikayesi","acceptance criteria","kabul kriteri"],
+      "product owner":["po","ürün sahibi","product management","ürün yönetimi","backlog"],
+      "agile":["scrum","kanban","sprint","retrospective","standup"],
+      "api":["rest","soap","graphql","endpoint","swagger","openapi"],
+      "sql":["postgres","oracle","mssql","mysql","query","sorgu"],
+      "leadership":["team lead","takım lideri","mentoring","mentorluk","managed","yönetti"],
+      "crm":["salesforce","dynamics","hubspot","müşteri ilişkileri"],
+      "kpi":["okrs","okr","metrics","hedef","performans"],
+      "finance":["accounting","muhasebe","budget","bütçe","ifrs","gaap"],
+      "kyc":["know your customer","masak","aml","kimlik doğrulama","nfc","liveness"],
+      "devops":["ci/cd","pipeline","docker","kubernetes","terraform","helm"]
+    },
+    tech: {
+      "javascript":["js","typescript","ts","node","react","vue","angular"],
+      "microservices":["service mesh","kafka","event-driven","rabbitmq"],
+      "cloud":["aws","azure","gcp","k8s","kubernetes"]
+    },
+    product: {
+      "discovery":["user research","müşteri görüşmesi","persona","journey map","mvp"],
+      "bpmn":["process modeling","süreç modelleme","uml","workflow"]
+    },
+    sales: {
+      "pipeline":["lead","prospecting","qualification","closing","crm"],
+      "marketing":["seo","performance marketing","growth","acquisition"]
+    },
+    finance: {
+      "risk":["credit risk","piyasa riski","var","stress test","compliance"],
+      "reporting":["financial statements","bilanço","gelir tablosu"]
+    },
+    ops: {
+      "support":["ticket","sla","incident","problem management","itil"],
+      "operations":["reconciliation","mutabakat","settlement","back office"]
+    }
+  };
+
+  // ---------- question list state ----------
+  const Qs = [];
+  function renderChips(){
+    const host = $("qChips");
+    host.innerHTML = "";
+    Qs.forEach((q, idx)=>{
+      const el = document.createElement("div");
+      el.className = "chip";
+      el.innerHTML = `<span>${escapeHtml(q)}</span><button title="remove">×</button>`;
+      el.querySelector("button").addEventListener("click", ()=>{ Qs.splice(idx,1); renderChips(); });
+      host.appendChild(el);
+    });
+    if(!Qs.length){
+      const lang = window.__shenLang || "tr";
+      host.innerHTML = `<span class="muted">${lang==="en" ? "No questions yet. Add one above." : "Henüz soru yok. Yukarıdan ekle."}</span>`;
+    }
+  }
+  renderChips();
+
+  $("addQ").addEventListener("click", ()=>{
+    const v = ($("qInput").value||"").trim();
+    if(!v) return;
+    Qs.push(v);
+    $("qInput").value = "";
+    renderChips();
+  });
+
+  $("clearQs").addEventListener("click", ()=>{
+    Qs.length = 0;
+    renderChips();
+  });
+
+  $("addTemplates").addEventListener("click", ()=>{
+    const lang = window.__shenLang || "tr";
+    const templates = (lang==="en") ? [
+      "Does the candidate have leadership / people management evidence?",
+      "Any API integration experience (REST/GraphQL/Swagger)?",
+      "Any KPI / OKR / metrics ownership?",
+      "Any domain experience (FinTech / Payments / Trading / KYC)?",
+      "What tools are mentioned (Jira/Confluence/Postman)?"
+    ] : [
+      "Liderlik / ekip yönetimi kanıtı var mı?",
+      "API entegrasyon tecrübesi var mı (REST/GraphQL/Swagger)?",
+      "KPI / OKR / metrik sahipliği var mı?",
+      "Domain tecrübesi var mı (FinTech/Ödeme/Trading/KYC)?",
+      "Hangi araçlar geçiyor (Jira/Confluence/Postman)?"
+    ];
+    templates.forEach(t=>Qs.push(t));
+    renderChips();
+  });
+
+  // ---------- helpers ----------
+  function csvToList(s){ return (s||"").split(",").map(x=>x.trim()).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i); }
+  function norm(s){ return (s||"").toLowerCase().replace(/\s+/g," ").trim(); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+  function escapeHtml(str){ return (str||"").replace(/[&<>"']/g, (m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m])); }
+
+  function extractYears(text){
+    const t = norm(text);
+    const m1 = t.match(/(\d{1,2})\s*(yıl|years|year)\b/);
+    if(m1) return parseInt(m1[1],10);
+    const years = [...t.matchAll(/\b(19\d{2}|20\d{2})\b/g)].map(m=>parseInt(m[1],10));
+    if(years.length >= 2){
+      const minY = Math.min(...years), maxY = Math.max(...years);
+      const diff = maxY - minY;
+      if(diff >= 1 && diff <= 40) return diff;
+    }
+    return null;
+  }
+
+  function findEvidence(text, keyword){
+    const raw = text || "";
+    const idx = norm(raw).indexOf(norm(keyword));
+    if(idx === -1) return "";
+    const start = Math.max(0, idx - 90);
+    const end = Math.min(raw.length, idx + keyword.length + 90);
+    return raw.slice(start, end).replace(/\s+/g," ").trim();
+  }
+
+  function highlightSnippet(snippet, q){
+    if(!snippet) return "";
+    const qq = (q||"").trim();
+    if(!qq) return escapeHtml(snippet);
+    const tokens = qq.split(/\s+/).filter(Boolean).slice(0,8);
+    let out = escapeHtml(snippet);
+    for(const t of tokens){
+      const re = new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+      out = out.replace(re, (m)=>`<span class="hl">${m}</span>`);
+    }
+    return out;
+  }
+
+  function getSynonyms(jobGroup){
+    const g = Object.assign({}, SYN.global);
+    const extra = SYN[jobGroup] || {};
+    // merge shallow: add keys from extra
+    for(const k of Object.keys(extra)){
+      g[k] = (g[k] || []).concat(extra[k]);
+    }
+    return g;
+  }
+
+  function tokensFromQuestion(q){
+    // ultra-simple tokenizer: take keywords >= 3 chars
+    return (q||"").toLowerCase().split(/[^a-z0-9ğüşöçıİĞÜŞÖÇ]+/i).map(x=>x.trim()).filter(x=>x.length>=3);
+  }
+
+  // ---------- file parsing ----------
+  async function readTxtFile(file){ return await file.text(); }
+  async function readPdfFile(file){
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let full = "";
+    for(let p=1; p<=pdf.numPages; p++){
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      const strings = content.items.map(it => it.str);
+      full += strings.join(" ") + "\n";
+    }
+    return full;
+  }
+  async function readDocxFile(file){
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return result.value || "";
+  }
+  async function readHtmlFile(file){
+    const txt = await file.text();
+    const stripped = txt.replace(/<script[\s\S]*?<\/script>/gi,"")
+                        .replace(/<style[\s\S]*?<\/style>/gi,"")
+                        .replace(/<[^>]+>/g," ");
+    return stripped.replace(/\s+/g," ").trim();
+  }
+  async function readAny(file){
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if(ext === "txt") return await readTxtFile(file);
+    if(ext === "pdf") return await readPdfFile(file);
+    if(ext === "docx") return await readDocxFile(file);
+    if(ext === "html" || ext === "htm") return await readHtmlFile(file);
+    return await readTxtFile(file);
+  }
+  async function wireFileInput(fileInputId, textareaId){
+    $(fileInputId).addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if(!file) return;
+      try{
+        $(textareaId).value = "Reading...";
+        const text = await readAny(file);
+        $(textareaId).value = text.trim();
+      }catch(err){
+        console.error(err);
+        $(textareaId).value = "Could not read file. Please paste text.";
+      }
+    });
+  }
+  wireFileInput("cvFileA","cvTextA");
+  wireFileInput("cvFileB","cvTextB");
+  wireFileInput("liFileA","liTextA");
+  wireFileInput("liFileB","liTextB");
+
+  // ---------- QA engine (Evidence-based) ----------
+  function answerQuestion(combinedText, q, synPack){
+    const lang = window.__shenLang || "tr";
+    const dict = I18N[lang] || I18N.tr;
+    const tNorm = norm(combinedText);
+
+    // 1) Confirmed: exact phrase
+    const exact = findEvidence(combinedText, q);
+    if(exact){
+      return { level:"ok", label:dict.confirmed, evidence: exact };
+    }
+
+    // 2) Try tokens + synonym keys
+    const toks = tokensFromQuestion(q);
+    // if any token found => confirmed-ish
+    for(const tok of toks){
+      if(tNorm.includes(tok)){
+        const ev = findEvidence(combinedText, tok);
+        return { level:"ok", label:dict.confirmed, evidence: ev || "" };
+      }
+    }
+
+    // 3) Likely via synonym mapping: if question contains a key or a synonym, search related list
+    // heuristic: if question contains "k8s", map to devops/cloud etc.
+    const qn = norm(q);
+    for(const key of Object.keys(synPack)){
+      const variants = [key].concat(synPack[key] || []);
+      const hitInQuestion = variants.some(v => qn.includes(norm(v)));
+      if(hitInQuestion){
+        // search any of the variants in the text
+        for(const v of variants){
+          if(tNorm.includes(norm(v))){
+            const ev = findEvidence(combinedText, v);
+            return { level:"warn", label:dict.likely, evidence: ev || "" };
+          }
+        }
+      }
+    }
+
+    // 4) Not found
+    return { level:"bad", label:dict.notfound, evidence:"" };
+  }
+
+  // ---------- Scorecard engine ----------
+  function analyzeScorecard(cvText, liText){
+    const must = csvToList($("must").value);
+    const nice = csvToList($("nice").value);
+    const red  = csvToList($("red").value);
+
+    const wMust  = parseFloat($("wMust").value || "12");
+    const wNice  = parseFloat($("wNice").value || "5");
+    const wYears = parseFloat($("wYears").value || "8");
+    const wRed   = parseFloat($("wRed").value || "10");
+
+    const minYears = parseFloat($("minYears").value || "0");
+    const loc = norm($("location").value || "");
+
+    const combined = (cvText || "") + "\n" + (liText || "");
+    const combinedNorm = norm(combined);
+
+    const evidence = [];
+    let mustHit=0, niceHit=0, redHit=0;
+
+    for(const k of must){
+      const hit = combinedNorm.includes(norm(k));
+      if(hit) mustHit++;
+      evidence.push({type:"Must", key:k, hit, ev: hit ? findEvidence(combined, k) : ""});
+    }
+    for(const k of nice){
+      const hit = combinedNorm.includes(norm(k));
+      if(hit) niceHit++;
+      evidence.push({type:"Nice", key:k, hit, ev: hit ? findEvidence(combined, k) : ""});
+    }
+    for(const k of red){
+      const hit = combinedNorm.includes(norm(k));
+      if(hit) redHit++;
+      evidence.push({type:"Red", key:k, hit, ev: hit ? findEvidence(combined, k) : ""});
+    }
+
+    const years = extractYears(combined);
+    let locOk = true;
+    if(loc) locOk = combinedNorm.includes(loc);
+
+    const mustCount = must.length || 0;
+    const niceCount = nice.length || 0;
+    const mustRatio = mustCount ? (mustHit / mustCount) : 0.60;
+    const niceRatio = niceCount ? (niceHit / niceCount) : 0.40;
+
+    let points=0, maxPoints=0;
+    const mustBlock = wMust * (mustCount ? mustCount : 5);
+    maxPoints += mustBlock; points += mustBlock * mustRatio;
+
+    const niceBlock = wNice * (niceCount ? niceCount : 6);
+    maxPoints += niceBlock; points += niceBlock * niceRatio;
+
+    maxPoints += wYears;
+    if(minYears>0){
+      if(years==null) points += wYears*0.35;
+      else points += (years>=minYears) ? wYears : wYears * clamp(years/minYears,0,1);
+    } else points += wYears*0.6;
+
+    maxPoints += 4;
+    points += loc ? (locOk ? 4 : 1.5) : 2.5;
+
+    points -= (redHit * wRed);
+
+    const score = clamp(Math.round((points/maxPoints)*100),0,100);
+    return {score, evidence, meta:{mustHit,mustCount,niceHit,niceCount,redHit,years}};
+  }
+
+  function statusFromScore(score){
+    const lang = window.__shenLang || "tr";
+    const dict = I18N[lang] || I18N.tr;
+    const thOk = parseFloat($("thOk").value || "75");
+    const thWarn = parseFloat($("thWarn").value || "55");
+    if(score >= thOk) return {label: dict.st_ok, cls:"ok"};
+    if(score >= thWarn) return {label: dict.st_warn, cls:"warn"};
+    return {label: dict.st_bad, cls:"bad"};
+  }
+
+  function renderScore(side, res){
+    $("score"+side).textContent = res.score.toString();
+    const st = statusFromScore(res.score);
+    const badgeEl = $("badge"+side);
+    badgeEl.textContent = st.label;
+    badgeEl.style.borderColor = st.cls==="ok" ? "rgba(38,208,124,.45)" : st.cls==="warn" ? "rgba(255,204,0,.45)" : "rgba(255,90,95,.45)";
+    badgeEl.style.background = st.cls==="ok" ? "rgba(38,208,124,.10)" : st.cls==="warn" ? "rgba(255,204,0,.10)" : "rgba(255,90,95,.10)";
+
+    const barEl = $("bar"+side);
+    barEl.style.width = res.score + "%";
+    barEl.className = st.cls;
+
+    $("kMust"+side).textContent = `${res.meta.mustHit}/${res.meta.mustCount}`;
+    $("kNice"+side).textContent = `${res.meta.niceHit}/${res.meta.niceCount}`;
+    $("kYears"+side).textContent = (res.meta.years==null) ? "—" : `${res.meta.years}y`;
+    $("kRed"+side).textContent = `${res.meta.redHit}`;
+  }
+
+  function renderTable(tableId, items){
+    const tbody = $(tableId).querySelector("tbody");
+    tbody.innerHTML = "";
+    if(!items.length){
+      tbody.innerHTML = `<tr><td colspan="3" class="muted">—</td></tr>`;
+      return;
+    }
+    for(const r of items){
+      const cls = r.hit ? "ok" : (r.type==="Red" ? "warn" : "bad");
+      const status = r.hit ? (r.type==="Red" ? "⚠️" : "✅") : (r.type==="Red" ? "—" : "❌");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="pill2 ${r.type==="Red" ? "warn": ""}">${escapeHtml(r.type)}</span> <b>${escapeHtml(r.key)}</b></td>
+        <td><span class="pill2 ${cls}">${status}</span></td>
+        <td class="tiny">${r.hit ? highlightSnippet((r.ev||"").slice(0,220), r.key) : ""}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  function renderQA(hostId, combinedText, synPack){
+    const host = $(hostId);
+    host.innerHTML = "";
+    const lang = window.__shenLang || "tr";
+    const dict = I18N[lang] || I18N.tr;
+
+    const list = Qs.length ? Qs : [
+      (lang==="en" ? "Any leadership evidence?" : "Liderlik kanıtı var mı?"),
+      (lang==="en" ? "Any API integration experience?" : "API entegrasyon tecrübesi var mı?"),
+      (lang==="en" ? "Any KPI / OKR ownership?" : "KPI / OKR sahipliği var mı?")
+    ];
+
+    list.forEach(q=>{
+      const a = answerQuestion(combinedText, q, synPack);
+      const pillCls = a.level==="ok" ? "ok" : a.level==="warn" ? "warn" : "bad";
+      const card = document.createElement("div");
+      card.className = "qaCard";
+      card.innerHTML = `
+        <div class="qaTop">
+          <b>${escapeHtml(q)}</b>
+          <span class="pill2 ${pillCls}">${escapeHtml(a.label)}</span>
+        </div>
+        <div class="tiny" style="margin-top:8px">
+          ${a.evidence ? highlightSnippet(a.evidence, q) : `<span class="muted">${dict.evidenceNotFound}</span>`}
+        </div>
+      `;
+      host.appendChild(card);
+    });
+  }
+
+  function renderCompare(resA, resB){
+    const lang = window.__shenLang || "tr";
+    const dict = I18N[lang] || I18N.tr;
+    const comp = $("compare");
+
+    if(resA.score === resB.score){
+      comp.textContent = dict.equal;
+      return;
+    }
+    const aWins = resA.score > resB.score;
+    const winner = aWins ? "Candidate #1" : "Candidate #2";
+    const w = aWins ? resA : resB;
+    const l = aWins ? resB : resA;
+
+    const mustGap = (w.meta.mustHit - l.meta.mustHit);
+    const niceGap = (w.meta.niceHit - l.meta.niceHit);
+    const redGap  = (l.meta.redHit - w.meta.redHit);
+
+    comp.innerHTML = `
+      <div><span class="pill2 ok">${winner}</span> ${dict.winner} (Score: ${w.score} vs ${l.score})</div>
+      <div class="tiny" style="margin-top:8px">
+        • Must gap: <b>${mustGap>=0?"+":""}${mustGap}</b>
+        • Nice gap: <b>${niceGap>=0?"+":""}${niceGap}</b>
+        • Red gap: <b>${redGap>=0?"+":""}${redGap}</b>
+      </div>
+    `;
+  }
+
+  function runAll(){
+    const jobGroup = $("jobGroup").value || "auto";
+    const synPack = getSynonyms(jobGroup==="auto" ? "global" : jobGroup);
+
+    const cvA = $("cvTextA").value || "";
+    const liA = $("liTextA").value || "";
+    const cvB = $("cvTextB").value || "";
+    const liB = $("liTextB").value || "";
+
+    const combinedA = cvA + "\n" + liA;
+    const combinedB = cvB + "\n" + liB;
+
+    renderQA("qaA", combinedA, synPack);
+    renderQA("qaB", combinedB, synPack);
+
+    const resA = analyzeScorecard(cvA, liA);
+    const resB = analyzeScorecard(cvB, liB);
+
+    renderScore("A", resA);
+    renderScore("B", resB);
+    renderTable("tableA", resA.evidence);
+    renderTable("tableB", resB.evidence);
+    renderCompare(resA, resB);
+  }
+
+  $("run").addEventListener("click", runAll);
+
+  $("preset").addEventListener("click", ()=>{
+    const lang = window.__shenLang || "tr";
+    $("jobGroup").value = "auto";
+    $("must").value = "communication, problem solving";
+    $("nice").value = "jira, confluence, excel";
+    $("red").value  = "plagiarism, fake";
+    $("minYears").value = 3;
+    $("location").value = "";
+    Qs.length = 0;
+    if(lang==="en"){
+      Qs.push("Any leadership evidence?");
+      Qs.push("Any API / data integration experience?");
+      Qs.push("Any KPI / OKR ownership?");
+    } else {
+      Qs.push("Liderlik / ekip yönetimi kanıtı var mı?");
+      Qs.push("API / veri entegrasyonu tecrübesi var mı?");
+      Qs.push("KPI / OKR sahipliği var mı?");
+    }
+    renderChips();
+  });
+
+  $("reset").addEventListener("click", ()=>{
+    $("must").value=""; $("nice").value=""; $("red").value=""; $("minYears").value=""; $("location").value="";
+    Qs.length=0; renderChips();
+  });
+
+  $("clearA").addEventListener("click", ()=>{
+    $("nameA").value=""; $("cvFileA").value=""; $("cvTextA").value=""; $("liFileA").value=""; $("liTextA").value="";
+  });
+  $("clearB").addEventListener("click", ()=>{
+    $("nameB").value=""; $("cvFileB").value=""; $("cvTextB").value=""; $("liFileB").value=""; $("liTextB").value="";
+  });
+</script>
+</body>
+</html>
